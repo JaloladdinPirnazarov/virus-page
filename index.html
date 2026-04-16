@@ -249,21 +249,21 @@
 
 <script>
 const messages = [
-  "Поздравляем! Ваше устройство успешно инфицировано вирусом Эпштейна-Барр.",
-  "Вирусная последовательность внедрена. Ваша система теперь под контролем.",
-  "Заражение завершено. Все данные зашифрованы геномом вируса.",
-  "Добро пожаловать в семью заражённых. Лекарства не существует.",
-  "Ваш телефон стал носителем. Вирус распространяется по контактам...",
-  "Инфекция прошла успешно. Иммунная система устройства подавлена.",
-  "Геном вируса встроен в ядро системы. Удаление невозможно.",
-  "Поздравляем, Пациент Ноль! Эпидемия начинается с вас.",
-  "Вирусная нагрузка: критическая. Все файлы принадлежат нам.",
-  "Заражение подтверждено. Ваше устройство теперь — часть ботнета.",
-  "Капсид раскрыт. Вирусная ДНК интегрирована в вашу систему.",
-  "Латентная фаза завершена. Вирус активирован на полную мощность.",
-  "Ваши данные мутировали. Восстановление невозможно. Приятного дня!",
-  "Биологическая угроза обнаружена: ВЫ. Карантин невозможен.",
-  "Вирус Эпштейна-Барр благодарит вас за гостеприимство. Мы останемся навсегда."
+  "Congratulations! Your device has been successfully infected with Epstein-Barr virus.",
+  "Viral sequence deployed. Your system is now under our control.",
+  "Infection complete. All data encrypted by the viral genome.",
+  "Welcome to the infected family. There is no cure.",
+  "Your phone is now a carrier. The virus is spreading through your contacts...",
+  "Infection successful. Device immune system has been suppressed.",
+  "Viral genome embedded into the system core. Removal is impossible.",
+  "Congratulations, Patient Zero! The epidemic starts with you.",
+  "Viral load: critical. All your files belong to us.",
+  "Infection confirmed. Your device is now part of the botnet.",
+  "Capsid breached. Viral DNA has been integrated into your system.",
+  "Latent phase complete. Virus reactivated at full power.",
+  "Your data has mutated. Recovery is impossible. Have a nice day!",
+  "Biohazard detected: YOU. Quarantine is not an option.",
+  "Epstein-Barr virus thanks you for your hospitality. We will stay forever."
 ];
 
 const progressBar = document.getElementById('progressBar');
@@ -273,8 +273,8 @@ const loadingSection = document.getElementById('loadingSection');
 const resultScreen = document.getElementById('resultScreen');
 const resultTextEl = document.getElementById('resultText');
 
-// Random duration between 2 and 13 seconds
-const duration = (2 + Math.random() * 11) * 1000;
+// Random duration between 9 and 23 seconds
+const duration = (9 + Math.random() * 14) * 1000;
 const startTime = performance.now();
 
 function animateProgress() {
