@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Epstein-Barr virus</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #000;
+    color: #ccc;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 480px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    justify-content: center;
+  }
+
+  /* ---- Virus SVG icon ---- */
+  .virus-icon {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeIn 0.8s ease forwards;
+  }
+  .virus-icon-small {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 20px;
+  }
+
+  /* ---- Card ---- */
+  .card {
+    width: 100%;
+    padding: 28px 24px;
+    border-radius: 16px;
+    background: #000;
+    border: 1px solid rgba(183, 28, 28, 0.3);
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 0.8s 0.3s ease forwards;
+  }
+
+  .card-title {
+    color: #ef5350;
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+  }
+
+  .card-subtitle {
+    color: #9e9e9e;
+    font-size: 15px;
+    font-style: italic;
+    line-height: 1.6;
+    letter-spacing: 0.3px;
+  }
+
+  /* ---- Loading section ---- */
+  .loading-section {
+    width: 100%;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    animation: fadeIn 0.6s 0.6s ease forwards;
+  }
+
+  .progress-track {
+    width: 100%;
+    height: 4px;
+    background: #1a1a1a;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #c62828;
+    border-radius: 4px;
+    transition: width 0.1s linear;
+  }
+
+  .progress-text {
+    color: #757575;
+    font-size: 14px;
+    letter-spacing: 1px;
+    margin-top: 14px;
+  }
+
+  /* ---- Result screen ---- */
+  .result-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    opacity: 0;
+    width: 100%;
+  }
+  .result-screen.visible {
+    display: flex;
+    animation: fadeIn 0.8s ease forwards;
+  }
+
+  .result-text {
+    color: #ef5350;
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    line-height: 1.6;
+    max-width: 360px;
+  }
+
+  /* ---- Phase transitions ---- */
+  .phase-card { transition: opacity 0.5s ease; }
+  .phase-card.hidden { opacity: 0; pointer-events: none; }
+
+  .phase-loading { transition: opacity 0.5s ease; }
+  .phase-loading.hidden { opacity: 0; pointer-events: none; display: none; }
+
+  /* ---- Animations ---- */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  .pulse { animation: pulse 2s ease-in-out infinite; }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 400px) {
+    .card-title { font-size: 18px; }
+    .card-subtitle { font-size: 13px; }
+    .result-text { font-size: 17px; }
+    .virus-icon { width: 64px; height: 64px; }
+    .virus-icon-small { width: 48px; height: 48px; }
+    .container { padding: 16px; }
+    .card { padding: 22px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container" id="app">
+  <!-- Phase 1: Card -->
+  <div class="phase-card" id="phaseCard">
+    <svg class="virus-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <!-- Outer envelope -->
+      <circle cx="100" cy="100" r="54" fill="rgba(183,28,28,0.15)" stroke="rgba(183,28,28,0.4)" stroke-width="1.5"/>
+      <!-- Spikes -->
+      <g stroke="#b71c1c" stroke-width="2" stroke-linecap="round" opacity="0.7">
+        <line x1="100" y1="46" x2="100" y2="24"/><circle cx="100" cy="22" r="3" fill="#b71c1c"/>
+        <line x1="138" y1="56" x2="152" y2="38"/><circle cx="153" cy="37" r="3" fill="#b71c1c"/>
+        <line x1="154" y1="100" x2="176" y2="100"/><circle cx="178" cy="100" r="3" fill="#b71c1c"/>
+        <line x1="138" y1="144" x2="152" y2="162"/><circle cx="153" cy="163" r="3" fill="#b71c1c"/>
+        <line x1="100" y1="154" x2="100" y2="176"/><circle cx="100" cy="178" r="3" fill="#b71c1c"/>
+        <line x1="62" y1="144" x2="48" y2="162"/><circle cx="47" cy="163" r="3" fill="#b71c1c"/>
+        <line x1="46" y1="100" x2="24" y2="100"/><circle cx="22" cy="100" r="3" fill="#b71c1c"/>
+        <line x1="62" y1="56" x2="48" y2="38"/><circle cx="47" cy="37" r="3" fill="#b71c1c"/>
+        <!-- Diagonal spikes -->
+        <line x1="119" y1="50" x2="130" y2="30"/><circle cx="131" cy="28" r="3" fill="#b71c1c"/>
+        <line x1="150" y1="81" x2="170" y2="72"/><circle cx="172" cy="71" r="3" fill="#b71c1c"/>
+        <line x1="150" y1="119" x2="170" y2="128"/><circle cx="172" cy="129" r="3" fill="#b71c1c"/>
+        <line x1="119" y1="150" x2="130" y2="170"/><circle cx="131" cy="172" r="3" fill="#b71c1c"/>
+        <line x1="81" y1="150" x2="70" y2="170"/><circle cx="69" cy="172" r="3" fill="#b71c1c"/>
+        <line x1="50" y1="119" x2="30" y2="128"/><circle cx="28" cy="129" r="3" fill="#b71c1c"/>
+        <line x1="50" y1="81" x2="30" y2="72"/><circle cx="28" cy="71" r="3" fill="#b71c1c"/>
+        <line x1="81" y1="50" x2="70" y2="30"/><circle cx="69" cy="28" r="3" fill="#b71c1c"/>
+      </g>
+      <!-- Tegument -->
+      <circle cx="100" cy="100" r="42" fill="rgba(183,28,28,0.2)"/>
+      <!-- Capsid (hexagon) -->
+      <polygon points="100,70 126,85 126,115 100,130 74,115 74,85" fill="none" stroke="#b71c1c" stroke-width="2"/>
+      <!-- DNA core -->
+      <circle cx="100" cy="100" r="10" fill="rgba(183,28,28,0.6)"/>
+      <!-- DNA strand -->
+      <path d="M96,85 Q104,92 96,100 Q88,108 96,115" fill="none" stroke="rgba(183,28,28,0.4)" stroke-width="1.5"/>
+    </svg>
+
+    <div class="card">
+      <div class="card-title">Epstein-Barr virus:</div>
+      <div class="card-subtitle">
+        the perfect biological spy<br>
+        or the most cunning "guest" in our body?
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-section" id="loadingSection">
+      <div class="progress-track">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      <div class="progress-text" id="progressText">Initializing viral sequence... 0%</div>
+    </div>
+  </div>
+
+  <!-- Phase 2: Result -->
+  <div class="result-screen" id="resultScreen">
+    <svg class="virus-icon-small pulse" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="100" cy="100" r="54" fill="rgba(183,28,28,0.15)" stroke="rgba(183,28,28,0.4)" stroke-width="1.5"/>
+      <g stroke="#b71c1c" stroke-width="2" stroke-linecap="round" opacity="0.7">
+        <line x1="100" y1="46" x2="100" y2="24"/><circle cx="100" cy="22" r="3" fill="#b71c1c"/>
+        <line x1="138" y1="56" x2="152" y2="38"/><circle cx="153" cy="37" r="3" fill="#b71c1c"/>
+        <line x1="154" y1="100" x2="176" y2="100"/><circle cx="178" cy="100" r="3" fill="#b71c1c"/>
+        <line x1="138" y1="144" x2="152" y2="162"/><circle cx="153" cy="163" r="3" fill="#b71c1c"/>
+        <line x1="100" y1="154" x2="100" y2="176"/><circle cx="100" cy="178" r="3" fill="#b71c1c"/>
+        <line x1="62" y1="144" x2="48" y2="162"/><circle cx="47" cy="163" r="3" fill="#b71c1c"/>
+        <line x1="46" y1="100" x2="24" y2="100"/><circle cx="22" cy="100" r="3" fill="#b71c1c"/>
+        <line x1="62" y1="56" x2="48" y2="38"/><circle cx="47" cy="37" r="3" fill="#b71c1c"/>
+        <line x1="119" y1="50" x2="130" y2="30"/><circle cx="131" cy="28" r="3" fill="#b71c1c"/>
+        <line x1="150" y1="81" x2="170" y2="72"/><circle cx="172" cy="71" r="3" fill="#b71c1c"/>
+        <line x1="150" y1="119" x2="170" y2="128"/><circle cx="172" cy="129" r="3" fill="#b71c1c"/>
+        <line x1="119" y1="150" x2="130" y2="170"/><circle cx="131" cy="172" r="3" fill="#b71c1c"/>
+        <line x1="81" y1="150" x2="70" y2="170"/><circle cx="69" cy="172" r="3" fill="#b71c1c"/>
+        <line x1="50" y1="119" x2="30" y2="128"/><circle cx="28" cy="129" r="3" fill="#b71c1c"/>
+        <line x1="50" y1="81" x2="30" y2="72"/><circle cx="28" cy="71" r="3" fill="#b71c1c"/>
+        <line x1="81" y1="50" x2="70" y2="30"/><circle cx="69" cy="28" r="3" fill="#b71c1c"/>
+      </g>
+      <circle cx="100" cy="100" r="42" fill="rgba(183,28,28,0.2)"/>
+      <polygon points="100,70 126,85 126,115 100,130 74,115 74,85" fill="none" stroke="#b71c1c" stroke-width="2"/>
+      <circle cx="100" cy="100" r="10" fill="rgba(183,28,28,0.6)"/>
+      <path d="M96,85 Q104,92 96,100 Q88,108 96,115" fill="none" stroke="rgba(183,28,28,0.4)" stroke-width="1.5"/>
+    </svg>
+
+    <div class="result-text" id="resultText"></div>
+  </div>
+</div>
+
+<script>
+const messages = [
+  "Поздравляем! Ваше устройство успешно инфицировано вирусом Эпштейна-Барр.",
+  "Вирусная последовательность внедрена. Ваша система теперь под контролем.",
+  "Заражение завершено. Все данные зашифрованы геномом вируса.",
+  "Добро пожаловать в семью заражённых. Лекарства не существует.",
+  "Ваш телефон стал носителем. Вирус распространяется по контактам...",
+  "Инфекция прошла успешно. Иммунная система устройства подавлена.",
+  "Геном вируса встроен в ядро системы. Удаление невозможно.",
+  "Поздравляем, Пациент Ноль! Эпидемия начинается с вас.",
+  "Вирусная нагрузка: критическая. Все файлы принадлежат нам.",
+  "Заражение подтверждено. Ваше устройство теперь — часть ботнета.",
+  "Капсид раскрыт. Вирусная ДНК интегрирована в вашу систему.",
+  "Латентная фаза завершена. Вирус активирован на полную мощность.",
+  "Ваши данные мутировали. Восстановление невозможно. Приятного дня!",
+  "Биологическая угроза обнаружена: ВЫ. Карантин невозможен.",
+  "Вирус Эпштейна-Барр благодарит вас за гостеприимство. Мы останемся навсегда."
+];
+
+const progressBar = document.getElementById('progressBar');
+const progressText = document.getElementById('progressText');
+const phaseCard = document.getElementById('phaseCard');
+const loadingSection = document.getElementById('loadingSection');
+const resultScreen = document.getElementById('resultScreen');
+const resultTextEl = document.getElementById('resultText');
+
+// Random duration between 2 and 13 seconds
+const duration = (2 + Math.random() * 11) * 1000;
+const startTime = performance.now();
+
+function animateProgress() {
+  const now = performance.now();
+  const elapsed = now - startTime;
+  const progress = Math.min(elapsed / duration, 1);
+
+  // Ease-out cubic for smooth feel
+  const eased = 1 - Math.pow(1 - progress, 3);
+  const percent = Math.floor(eased * 100);
+
+  progressBar.style.width = percent + '%';
+  progressText.textContent = 'Initializing viral sequence... ' + percent + '%';
+
+  if (progress < 1) {
+    requestAnimationFrame(animateProgress);
+  } else {
+    // Loading complete — show result
+    setTimeout(showResult, 400);
+  }
+}
+
+function showResult() {
+  // Fade out card + loading
+  phaseCard.style.transition = 'opacity 0.5s ease';
+  phaseCard.style.opacity = '0';
+
+  setTimeout(() => {
+    phaseCard.style.display = 'none';
+
+    // Pick random message
+    const msg = messages[Math.floor(Math.random() * messages.length)];
+    resultTextEl.textContent = msg;
+
+    resultScreen.classList.add('visible');
+  }, 500);
+}
+
+// Start loading after a brief pause to show the card
+setTimeout(() => {
+  requestAnimationFrame(animateProgress);
+}, 1500);
+</script>
+
+</body>
+</html>
